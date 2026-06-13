@@ -19,6 +19,10 @@
                     <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
                         {{ __('Usuários') }}
                     </x-nav-link>
+
+                    <x-nav-link :href="route('vehicles.index')" :active="request()->routeIs('vehicles.*')">
+                        {{ __('Veículos') }}
+                    </x-nav-link>
                 </div>
 
             <!-- Settings Dropdown -->
