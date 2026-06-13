@@ -16,9 +16,12 @@ class UserController extends Controller
         $search = $request->input('search');
 
         $users = User::query()
+            ->where('id', '!=', auth()->id()) // esconde o próprio usuário logado (segue o design)
             ->when($search, function ($query, $search) {
-                $query->where('name', 'ilike', "%{$search}%")
-                    ->orWhere('email', 'ilike', "%{$search}%");
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'ilike', "%{$search}%")
+                        ->orWhere('email', 'ilike', "%{$search}%");
+                });
             })
             ->orderBy('name')
             ->paginate(10)
