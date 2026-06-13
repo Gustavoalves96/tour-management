@@ -27,6 +27,10 @@
                     <x-nav-link :href="route('drivers.index')" :active="request()->routeIs('drivers.*')">
                         {{ __('Motoristas') }}
                     </x-nav-link>
+
+                    <x-nav-link :href="route('trips.index')" :active="request()->routeIs('trips.*')">
+                        {{ __('Viagens') }}
+                    </x-nav-link>
                 </div>
 
             <!-- Settings Dropdown -->

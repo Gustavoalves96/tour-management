@@ -9,6 +9,15 @@ class Trip extends Model
 {
     use HasFactory;
 
+    // Valores permitidos, centralizados (usados nos selects e na validação)
+    public const STATUSES = [
+        'in_progress' => 'Em andamento',
+        'completed' => 'Concluída',
+        'cancelled' => 'Cancelada',
+    ];
+
+    public const RULES = ['Turismo', 'Faculdade'];
+
     protected $fillable = [
         'name', 'rule', 'origin', 'destination', 'date',
         'departure_time', 'arrival_time', 'single_ticket_price',

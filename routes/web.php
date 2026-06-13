@@ -6,6 +6,7 @@ use App\Http\Controllers\FirstAccessPasswordController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\TripController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,6 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('users/{user}/toggle-block', [UserController::class, 'toggleBlock'])->name('users.toggle-block');
     Route::resource('vehicles', VehicleController::class)->except(['show']);
     Route::resource('drivers', DriverController::class)->except(['show']);
+    Route::resource('trips', TripController::class)->except(['show']);
 
     // Troca de senha no primeiro acesso (RF06)
     Route::get('/first-access', [FirstAccessPasswordController::class, 'edit'])->name('password.change');
