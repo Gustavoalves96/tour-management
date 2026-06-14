@@ -14,6 +14,13 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                coinpel: {
+                    light:   '#f5f2f9', // fundo claro / item de menu ativo
+                    DEFAULT: '#593e75', // a cor da marca (usada na maioria das telas)
+                    dark:    '#4a3361', // hover (escurece um pouco)
+                },
+            },
         },
     },
 
