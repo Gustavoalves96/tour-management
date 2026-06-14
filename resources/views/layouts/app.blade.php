@@ -23,7 +23,7 @@
     <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
            class="fixed inset-y-0 left-0 z-30 w-64 bg-coinpel transform transition-transform duration-200 lg:translate-x-0">
         <div class="flex items-center justify-center h-24 border-b border-white/10">
-            <img src="{{ asset('images/vertical1.png') }}" alt="COINPEL" class="h-16">
+            <img src="{{ asset('images/logo-white.png') }}" alt="COINPEL" class="h-16">
         </div>
 
         <nav class="mt-4 px-3 space-y-1">
