@@ -16,7 +16,7 @@
     </x-slot>
 
     <div x-data="vehiclesDrawer()" @vehicle-create.window="openCreate()" class="p-6">
-        <div class="bg-white rounded-xl border border-gray-200">
+        <div class="hidden lg:block bg-white rounded-xl border border-gray-200">
             <table class="w-full text-sm whitespace-nowrap">
                 <thead>
                 <tr class="text-left text-gray-500 border-b border-gray-100">
@@ -62,6 +62,41 @@
                 @endforelse
                 </tbody>
             </table>
+        </div>
+
+        {{-- Cards (mobile) --}}
+        <div class="lg:hidden space-y-3">
+            @forelse ($vehicles as $vehicle)
+                <div class="bg-white rounded-xl border border-gray-200 p-4">
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="min-w-0">
+                            <p class="font-semibold text-gray-800">{{ $vehicle->prefix }} · {{ $vehicle->plate }}</p>
+                            <p class="text-sm text-gray-500 truncate">{{ $vehicle->model }} — {{ $vehicle->type }}</p>
+                        </div>
+                        <div x-data="{ menu: false }" class="relative shrink-0">
+                            <button @click="menu = !menu" class="text-gray-400 hover:text-gray-600 p-1"><img src="{{ asset('icons/akar-icons_more-horizontal.svg') }}" class="w-5 h-5" alt="Ações"></button>
+                            <div x-show="menu" x-cloak @click.outside="menu = false" class="absolute right-0 mt-1 w-44 bg-white rounded-lg shadow-lg border border-gray-100 py-1 z-10 text-left">
+                                <button @click="menu = false; openEdit({{ $vehicle->id }})" class="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                                    <img src="{{ asset('icons/system-uicons_create.svg') }}" class="w-4 h-4" alt=""> Editar veículo
+                                </button>
+                                <form method="POST" action="{{ route('vehicles.destroy', $vehicle) }}" onsubmit="return confirm('Excluir este veículo?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-50">
+                                        <img src="{{ asset('icons/system-uicons_trash.svg') }}" class="w-4 h-4" alt=""> Deletar veículo
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 grid grid-cols-2 gap-y-1 text-sm text-gray-700">
+                        <div><span class="text-gray-400">Chassi:</span> {{ $vehicle->chassis }}</div>
+                        <div><span class="text-gray-400">Capacidade:</span> {{ $vehicle->capacity }}</div>
+                        <div><span class="text-gray-400">Ano:</span> {{ $vehicle->year }}</div>
+                    </div>
+                </div>
+            @empty
+                <div class="bg-white rounded-xl border border-gray-200 p-8 text-center text-gray-500">Nenhum veículo cadastrado.</div>
+            @endforelse
         </div>
 
         <div class="mt-6">{{ $vehicles->links() }}</div>
