@@ -6,8 +6,10 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                 Adicionar motorista
             </a>
-            <button type="button" class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 whitespace-nowrap">Filtrar</button>
-            <form method="GET" action="{{ route('drivers.index') }}" class="ml-auto relative hidden sm:block">
+            <button type="button" disabled title="Em breve"
+                    class="hidden sm:inline-flex rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-400 cursor-not-allowed whitespace-nowrap">
+                Filtrar
+            </button>            <form method="GET" action="{{ route('drivers.index') }}" class="ml-auto relative hidden sm:block">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Pesquisar motorista"
                        class="w-56 lg:w-72 rounded-lg border-gray-300 pr-10 text-sm focus:border-coinpel focus:ring-coinpel">
                 <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2"><img src="{{ asset('icons/system-uicons_search.svg') }}" class="w-4 h-4" alt="Buscar"></button>
