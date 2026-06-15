@@ -1,57 +1,69 @@
 <x-app-layout>
-    <x-slot name="header"><h2 class="font-semibold text-xl text-gray-800 leading-tight">Veículos</h2></x-slot>
+    <x-slot name="header">
+        <div class="flex items-center gap-3">
+            <a href="{{ route('vehicles.create') }}"
+               class="inline-flex items-center gap-1.5 rounded-lg bg-coinpel px-4 py-2 text-sm font-semibold text-white hover:bg-coinpel-dark whitespace-nowrap">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                Adicionar veículo
+            </a>
+            <button type="button" class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 whitespace-nowrap">Filtrar</button>
+            <form method="GET" action="{{ route('vehicles.index') }}" class="ml-auto relative hidden sm:block">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Pesquisar veículo"
+                       class="w-56 lg:w-72 rounded-lg border-gray-300 pr-10 text-sm focus:border-coinpel focus:ring-coinpel">
+                <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2"><img src="{{ asset('icons/system-uicons_search.svg') }}" class="w-4 h-4" alt="Buscar"></button>
+            </form>
+        </div>
+    </x-slot>
 
-    <div class="py-6 max-w-7xl mx-auto sm:px-6 lg:px-8">
-        @if (session('status'))
-            <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">{{ session('status') }}</div>
-        @endif
-
-        <div class="bg-white p-6 rounded shadow overflow-x-auto">
-            <div class="flex items-center justify-between mb-4">
-                <a href="{{ route('vehicles.create') }}" class="px-4 py-2 bg-indigo-600 text-white rounded">+ Adicionar veículo</a>
-                <form method="GET" action="{{ route('vehicles.index') }}">
-                    <input type="text" name="search" value="{{ $search }}" placeholder="Pesquisar veículo" class="border rounded px-3 py-2">
-                </form>
-            </div>
-
-            <table class="w-full text-left whitespace-nowrap">
+    <div class="p-6">
+        <div class="bg-white rounded-xl border border-gray-200">
+            <table class="w-full text-sm whitespace-nowrap">
                 <thead>
-                <tr class="border-b">
-                    <th class="py-2 pr-4">Prefixo</th>
-                    <th class="py-2 pr-4">Placa</th>
-                    <th class="py-2 pr-4">Modelo</th>
-                    <th class="py-2 pr-4">Chassi</th>
-                    <th class="py-2 pr-4">Tipo</th>
-                    <th class="py-2 pr-4">Capacidade</th>
-                    <th class="py-2 pr-4">Ano</th>
-                    <th class="py-2 text-right">Ações</th>
+                <tr class="text-left text-gray-500 border-b border-gray-100">
+                    <th class="px-4 py-3 font-medium">Prefixo</th>
+                    <th class="px-4 py-3 font-medium">Placa</th>
+                    <th class="px-4 py-3 font-medium">Modelo</th>
+                    <th class="px-4 py-3 font-medium">Chassi</th>
+                    <th class="px-4 py-3 font-medium">Tipo de veículo</th>
+                    <th class="px-4 py-3 font-medium">Capacidade</th>
+                    <th class="px-4 py-3 font-medium">Ano</th>
+                    <th class="px-4 py-3"></th>
                 </tr>
                 </thead>
                 <tbody>
                 @forelse ($vehicles as $vehicle)
-                    <tr class="border-b">
-                        <td class="py-2 pr-4">{{ $vehicle->prefix }}</td>
-                        <td class="py-2 pr-4">{{ $vehicle->plate }}</td>
-                        <td class="py-2 pr-4">{{ $vehicle->model }}</td>
-                        <td class="py-2 pr-4">{{ $vehicle->chassis }}</td>
-                        <td class="py-2 pr-4">{{ $vehicle->type }}</td>
-                        <td class="py-2 pr-4">{{ $vehicle->capacity }}</td>
-                        <td class="py-2 pr-4">{{ $vehicle->year }}</td>
-                        <td class="py-2 text-right space-x-3">
-                            <a href="{{ route('vehicles.edit', $vehicle) }}" class="text-indigo-600">Editar</a>
-                            <form action="{{ route('vehicles.destroy', $vehicle) }}" method="POST" class="inline" onsubmit="return confirm('Remover este veículo?')">
-                                @csrf @method('DELETE')
-                                <button class="text-red-600">Deletar</button>
-                            </form>
+                    <tr class="border-b border-gray-50 hover:bg-gray-50">
+                        <td class="px-4 py-3 text-gray-800">{{ $vehicle->prefix }}</td>
+                        <td class="px-4 py-3 text-gray-800">{{ $vehicle->plate }}</td>
+                        <td class="px-4 py-3 text-gray-800">{{ $vehicle->model }}</td>
+                        <td class="px-4 py-3 text-gray-800">{{ $vehicle->chassis }}</td>
+                        <td class="px-4 py-3 text-gray-800">{{ $vehicle->type }}</td>
+                        <td class="px-4 py-3 text-gray-800">{{ $vehicle->capacity }}</td>
+                        <td class="px-4 py-3 text-gray-800">{{ $vehicle->year }}</td>
+                        <td class="px-4 py-3 text-right">
+                            <div x-data="{ menu: false }" class="relative inline-block">
+                                <button @click="menu = !menu" class="text-gray-400 hover:text-gray-600 p-1"><img src="{{ asset('icons/akar-icons_more-horizontal.svg') }}" class="w-5 h-5" alt="Ações"></button>
+                                <div x-show="menu" x-cloak @click.outside="menu = false" class="absolute right-0 mt-1 w-44 bg-white rounded-lg shadow-lg border border-gray-100 py-1 z-10 text-left">
+                                    <a href="{{ route('vehicles.edit', $vehicle) }}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                                        <img src="{{ asset('icons/system-uicons_create.svg') }}" class="w-4 h-4" alt=""> Editar veículo
+                                    </a>
+                                    <form method="POST" action="{{ route('vehicles.destroy', $vehicle) }}" onsubmit="return confirm('Excluir este veículo?')">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-50">
+                                            <img src="{{ asset('icons/system-uicons_trash.svg') }}" class="w-4 h-4" alt=""> Deletar veículo
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="8" class="py-4 text-center text-gray-500">Nenhum veículo cadastrado.</td></tr>
+                    <tr><td colspan="8" class="px-4 py-12 text-center text-gray-500">Nenhum veículo cadastrado.</td></tr>
                 @endforelse
                 </tbody>
             </table>
-
-            <div class="mt-4">{{ $vehicles->links() }}</div>
         </div>
+
+        <div class="mt-6">{{ $vehicles->links() }}</div>
     </div>
 </x-app-layout>
