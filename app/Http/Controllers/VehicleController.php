@@ -19,6 +19,7 @@ class VehicleController extends Controller
     public function index(Request $request): View
     {
         $search = $request->input('search');
+        $seatType = $request->input('seat_type');
 
         $vehicles = Vehicle::query()
             ->when($search, function ($query, $search) {
@@ -28,11 +29,12 @@ class VehicleController extends Controller
                         ->orWhere('model', 'ilike', "%{$search}%");
                 });
             })
+            ->when($seatType, fn ($query, $seatType) => $query->where('seat_type', $seatType))
             ->orderBy('prefix')
             ->paginate(10)
             ->withQueryString();
 
-        return view('vehicles.index', compact('vehicles', 'search'));
+        return view('vehicles.index', compact('vehicles', 'search', 'seatType'));
     }
 
     public function create(): View
