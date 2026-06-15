@@ -14,20 +14,23 @@ class UserController extends Controller
     public function index(Request $request): View
     {
         $search = $request->input('search');
+        $blocked = $request->input('blocked');
 
         $users = User::query()
-            ->where('id', '!=', auth()->id()) // esconde o próprio usuário logado (segue o design)
+            ->where('id', '!=', auth()->id())
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'ilike', "%{$search}%")
                         ->orWhere('email', 'ilike', "%{$search}%");
                 });
             })
+            ->when($blocked === 'active', fn ($query) => $query->where('blocked', false))
+            ->when($blocked === 'blocked', fn ($query) => $query->where('blocked', true))
             ->orderBy('name')
             ->paginate(10)
             ->withQueryString();
 
-        return view('users.index', compact('users', 'search'));
+        return view('users.index', compact('users', 'search', 'blocked'));
     }
 
     public function create(): View

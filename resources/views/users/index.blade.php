@@ -6,9 +6,37 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                 Adicionar usuário
             </button>
-            <button type="button" class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 whitespace-nowrap">Filtrar</button>
+
+            {{-- Filtrar --}}
+            <div x-data="{ filterOpen: false }" class="relative">
+                <button type="button" @click="filterOpen = !filterOpen"
+                        class="rounded-lg border px-4 py-2 text-sm whitespace-nowrap hover:bg-gray-50 {{ $blocked ? 'border-coinpel text-coinpel' : 'border-gray-300 text-gray-700' }}">
+                    Filtrar
+                </button>
+                <div x-show="filterOpen" x-cloak @click.outside="filterOpen = false"
+                     class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-100 p-4 z-30">
+                    <form method="GET" action="{{ route('users.index') }}" class="space-y-3">
+                        <input type="hidden" name="search" value="{{ $search }}">
+                        <div>
+                            <label class="block text-xs text-gray-500 mb-1">Situação</label>
+                            <select name="blocked" class="w-full rounded-lg border-gray-300 text-sm focus:border-coinpel focus:ring-coinpel">
+                                <option value="">Todos</option>
+                                <option value="active" {{ $blocked === 'active' ? 'selected' : '' }}>Ativos</option>
+                                <option value="blocked" {{ $blocked === 'blocked' ? 'selected' : '' }}>Bloqueados</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-2 pt-1">
+                            <button type="submit" class="flex-1 rounded-lg bg-coinpel px-3 py-2 text-sm font-medium text-white hover:bg-coinpel-dark">Aplicar</button>
+                            <a href="{{ route('users.index') }}" class="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">Limpar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {{-- Busca --}}
             <form method="GET" action="{{ route('users.index') }}" class="ml-auto relative hidden sm:block">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Pesquisar usuário"
+                <input type="hidden" name="blocked" value="{{ $blocked }}">
+                <input type="text" name="search" value="{{ $search }}" placeholder="Pesquisar usuário"
                        class="w-56 lg:w-72 rounded-lg border-gray-300 pr-10 text-sm focus:border-coinpel focus:ring-coinpel">
                 <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2"><img src="{{ asset('icons/system-uicons_search.svg') }}" class="w-4 h-4" alt="Buscar"></button>
             </form>
