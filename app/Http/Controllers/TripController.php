@@ -72,6 +72,15 @@ class TripController extends Controller
 
     private function validateData(Request $request): array
     {
+        // Normaliza o valor da passagem: "R$ 1.234,56" -> "1234.56"
+        $price = $request->input('single_ticket_price');
+        if ($price !== null && $price !== '') {
+            $price = str_replace('.', '', $price);         // tira separador de milhar
+            $price = str_replace(',', '.', $price);         // vírgula decimal -> ponto
+            $price = preg_replace('/[^\d.]/', '', $price);   // tira "R$", espaços etc
+        }
+        $request->merge(['single_ticket_price' => $price === '' ? null : $price]);
+
         return $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'rule' => ['required', Rule::in(Trip::RULES)],
