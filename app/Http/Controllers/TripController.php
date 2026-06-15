@@ -15,9 +15,11 @@ class TripController extends Controller
     public function index(Request $request): View
     {
         $search = $request->input('search');
+        $status = $request->input('status');
+        $rule = $request->input('rule');
 
         $trips = Trip::query()
-            ->with(['vehicle', 'driver']) // carrega os relacionamentos junto (evita N+1)
+            ->with(['vehicle', 'driver'])
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'ilike', "%{$search}%")
@@ -25,11 +27,13 @@ class TripController extends Controller
                         ->orWhere('destination', 'ilike', "%{$search}%");
                 });
             })
+            ->when($status, fn ($query, $status) => $query->where('status', $status))
+            ->when($rule, fn ($query, $rule) => $query->where('rule', $rule))
             ->latest()
             ->paginate(10)
             ->withQueryString();
 
-        return view('trips.index', compact('trips', 'search'));
+        return view('trips.index', compact('trips', 'search', 'status', 'rule'));
     }
 
     public function create(): View
