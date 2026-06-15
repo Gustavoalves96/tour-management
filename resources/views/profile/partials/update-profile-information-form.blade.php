@@ -13,9 +13,28 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="mt-6 space-y-6">
         @csrf
         @method('patch')
+
+        <div x-data="{ photoUrl: '{{ auth()->user()->profile_photo ? asset('storage/' . auth()->user()->profile_photo) : '' }}' }">
+            <div class="flex items-center gap-4">
+                <template x-if="photoUrl">
+                    <img :src="photoUrl" class="w-20 h-20 rounded-full object-cover" alt="">
+                </template>
+                <template x-if="!photoUrl">
+                    <div class="w-20 h-20 rounded-full bg-coinpel-light flex items-center justify-center text-coinpel text-2xl font-semibold">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    </div>
+                </template>
+                <label class="text-sm text-coinpel cursor-pointer hover:underline">
+                    Alterar foto
+                    <input type="file" name="profile_photo" accept="image/*" class="hidden"
+                           @change="if($event.target.files[0]) photoUrl = URL.createObjectURL($event.target.files[0])">
+                </label>
+            </div>
+            @error('profile_photo') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+        </div>
 
         <div>
             <x-input-label for="name" :value="__('Nome')" />

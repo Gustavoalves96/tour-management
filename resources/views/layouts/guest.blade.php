@@ -16,7 +16,7 @@
     <div class="flex-1 flex items-center justify-center p-6 bg-white">
         <div class="w-full max-w-[460px]">
             <div class="flex justify-center mb-10">
-                <img src="{{ asset('images/logo-color.png') }}" alt="COINPEL" class="w-full">
+                <img src="{{ asset('images/logo-color.png') }}" alt="COINPEL" class="w-4/5 mx-auto">
             </div>
             {{ $slot }}
         </div>

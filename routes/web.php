@@ -9,11 +9,11 @@ use App\Http\Controllers\DriverController;
 use App\Http\Controllers\TripController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return redirect()->route('trips.index');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

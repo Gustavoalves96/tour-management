@@ -99,10 +99,17 @@
 
                     <div x-data="{ open: false }" class="relative">
                         <button @click="open = !open" class="flex items-center gap-2 text-gray-700">
-                                <span class="text-right leading-tight hidden sm:block">
-                                    <span class="block text-sm font-medium">{{ Auth::user()->name }}</span>
-                                    <span class="block text-xs text-gray-500">Administrador</span>
-                                </span>
+                            @if(Auth::user()->profile_photo)
+                                <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" class="w-9 h-9 rounded-full object-cover shrink-0 hidden sm:block" alt="">
+                            @else
+                                <div class="w-9 h-9 rounded-full bg-coinpel-light hidden sm:flex items-center justify-center text-coinpel font-semibold text-sm shrink-0">
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                </div>
+                            @endif
+                            <span class="text-left leading-tight hidden sm:block">
+                                <span class="block text-sm font-medium">{{ \Illuminate\Support\Str::before(Auth::user()->name, ' ') }}</span>
+                                <span class="block text-xs text-gray-500">Administrador</span>
+                            </span>
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
                             </svg>
