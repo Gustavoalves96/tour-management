@@ -50,6 +50,16 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        // Impede o acesso de usuários bloqueados (módulo Usuários)
+        if (Auth::user()->blocked) {
+            Auth::logout();
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'email' => 'Esta conta está bloqueada. Procure um administrador.',
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 

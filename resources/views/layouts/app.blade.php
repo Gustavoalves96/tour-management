@@ -113,8 +113,8 @@
                             <a href="{{ route('users.index') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 <img src="{{ asset('icons/usuarios.svg') }}" class="w-4 h-4" alt=""> Usuários
                             </a>
-                            <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <span class="ml-6">Meu perfil</span>
+                            <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                                <img src="{{ asset('icons/usuarios.svg') }}" class="w-4 h-4" alt=""> Meu perfil
                             </a>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
