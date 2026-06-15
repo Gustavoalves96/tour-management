@@ -69,6 +69,9 @@ class VehicleController extends Controller
     // Validação compartilhada entre criar e editar
     private function validateData(Request $request, ?Vehicle $vehicle = null): array
     {
+        // Placa sempre em maiúsculo (antes de validar, pra checagem de duplicidade já considerar maiúsculo)
+        $request->merge(['plate' => strtoupper((string) $request->input('plate'))]);
+
         $data = $request->validate([
             'prefix' => ['required', 'string', 'max:50'],
             'identification_name' => ['required', 'string', 'max:255'],
