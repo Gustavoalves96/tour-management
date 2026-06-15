@@ -72,6 +72,26 @@ class DriverController extends Controller
         return redirect()->route('drivers.index')->with('status', 'Motorista atualizado com sucesso!');
     }
 
+    public function updatePhoto(Request $request, Driver $driver)
+    {
+        $request->validate([
+            'profile_photo' => ['required', 'image', 'max:2048'],
+        ]);
+
+        // remove a foto antiga, se houver
+        if ($driver->profile_photo) {
+            Storage::disk('public')->delete($driver->profile_photo);
+        }
+
+        $driver->update([
+            'profile_photo' => $request->file('profile_photo')->store('drivers', 'public'),
+        ]);
+
+        return back()
+            ->with('status', 'Foto atualizada com sucesso.')
+            ->with('reopen_driver', $driver->id); // reabre o drawer no motorista
+    }
+
     public function destroy(Driver $driver): RedirectResponse
     {
         if ($driver->profile_photo) {

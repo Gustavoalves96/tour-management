@@ -24,6 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('users/{user}/toggle-block', [UserController::class, 'toggleBlock'])->name('users.toggle-block');
     Route::resource('vehicles', VehicleController::class)->except(['show']);
     Route::resource('drivers', DriverController::class)->except(['show']);
+    Route::post('/drivers/{driver}/photo', [\App\Http\Controllers\DriverController::class, 'updatePhoto'])->name('drivers.updatePhoto');
     Route::resource('trips', TripController::class)->except(['show']);
 
     // Troca de senha no primeiro acesso (RF06)

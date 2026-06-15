@@ -26,7 +26,7 @@
     </div>
     <div>
         <x-input-label for="cpf" value="CPF" />
-        <x-text-input id="cpf" name="cpf" class="block mt-1 w-full" :value="old('cpf', $driver?->cpf)" required />
+        <x-text-input id="cpf" name="cpf" class="block mt-1 w-full" x-mask="999.999.999-99" :value="old('cpf', $driver?->cpf)" required />
         <x-input-error :messages="$errors->get('cpf')" class="mt-2" />
     </div>
     <div>
@@ -40,7 +40,7 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div>
         <x-input-label for="postal_code" value="CEP" />
-        <x-text-input id="postal_code" name="postal_code" class="block mt-1 w-full" :value="old('postal_code', $driver?->postal_code)" required />
+        <x-text-input id="postal_code" name="postal_code" class="block mt-1 w-full" x-mask="99999-999" :value="old('postal_code', $driver?->postal_code)" required />
         <x-input-error :messages="$errors->get('postal_code')" class="mt-2" />
     </div>
     <div>
@@ -74,7 +74,7 @@
     </div>
     <div>
         <x-input-label for="phone" value="Telefone" />
-        <x-text-input id="phone" name="phone" class="block mt-1 w-full" :value="old('phone', $driver?->phone)" required />
+        <x-text-input id="phone" name="phone" class="block mt-1 w-full" x-mask="(99) 99999-9999" :value="old('phone', $driver?->phone)" required />
         <x-input-error :messages="$errors->get('phone')" class="mt-2" />
     </div>
 </div>
