@@ -1,11 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center gap-3">
-            <a href="{{ route('drivers.create') }}"
-               class="inline-flex items-center gap-1.5 rounded-lg bg-coinpel px-4 py-2 text-sm font-semibold text-white hover:bg-coinpel-dark whitespace-nowrap">
+            <button type="button" onclick="window.dispatchEvent(new CustomEvent('driver-create'))"
+                    class="inline-flex items-center gap-1.5 rounded-lg bg-coinpel px-4 py-2 text-sm font-semibold text-white hover:bg-coinpel-dark whitespace-nowrap">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                 Adicionar motorista
-            </a>
+            </button>
             <button type="button" disabled title="Em breve"
                     class="hidden sm:inline-flex rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-400 cursor-not-allowed whitespace-nowrap">
                 Filtrar
@@ -17,7 +17,7 @@
         </div>
     </x-slot>
 
-    <div x-data="driversDrawer()" class="p-6">
+    <div x-data="driversDrawer()" @driver-create.window="openCreate()" class="p-6">
         <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
             @forelse ($drivers as $driver)
                 <div @click="openView({{ $driver->id }})"
@@ -64,10 +64,11 @@
                 <div class="flex items-center justify-between px-6 py-4 border-b">
                     <button @click="close()" class="text-gray-400 hover:text-gray-600"><img src="{{ asset('icons/system-uicons_cross.svg') }}" class="w-5 h-5" alt="Fechar"></button>
                     <h2 class="font-semibold text-gray-800">Motorista</h2>
-                    <form :action="driver.delete_url" method="POST" onsubmit="return confirm('Excluir este motorista?')">
+                    <form x-show="mode !== 'create'" :action="driver.delete_url" method="POST" onsubmit="return confirm('Excluir este motorista?')">
                         @csrf @method('DELETE')
                         <button type="submit" class="text-gray-400 hover:text-red-600"><img src="{{ asset('icons/system-uicons_trash.svg') }}" class="w-4 h-4" alt="Excluir"></button>
                     </form>
+                    <span x-show="mode === 'create'" class="w-5"></span>
                 </div>
 
                 {{-- VISUALIZAÇÃO --}}
@@ -127,8 +128,9 @@
                 </div>
 
                 {{-- EDIÇÃO --}}
-                <form x-show="mode === 'edit'" :action="driver.update_url" method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
-                    @csrf @method('PUT')
+                <form x-show="mode === 'edit' || mode === 'create'" :action="actionUrl" method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
+                    @csrf
+                    <template x-if="mode === 'edit'"><input type="hidden" name="_method" value="PUT"></template>
                     <input type="hidden" name="driver_id" :value="driver.id">
 
                     <div>
@@ -211,8 +213,8 @@
                     </div>
 
                     <div class="flex gap-3 pt-2">
-                        <button type="button" @click="mode = 'view'" class="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Cancelar</button>
-                        <button type="submit" class="flex-1 rounded-lg bg-coinpel px-4 py-2 text-sm font-semibold text-white hover:bg-coinpel-dark">Salvar</button>
+                        <button type="button" @click="mode === 'create' ? close() : (mode = 'view')" class="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Cancelar</button>
+                        <button type="submit" class="flex-1 rounded-lg bg-coinpel px-4 py-2 text-sm font-semibold text-white hover:bg-coinpel-dark" x-text="mode === 'create' ? 'Finalizar cadastro' : 'Salvar'"></button>
                     </div>
                 </form>
             </div>
@@ -244,23 +246,37 @@
             },
             @endforeach
         };
+        const STORE_URL = @json(route('drivers.store'));
         const oldInput = @json(old());
         const errorDriverId = @json($errors->any() ? (string) old('driver_id') : null);
+        const hasErrors = @json($errors->any());
         const reopenDriverId = @json(session('reopen_driver'));
+
+        function emptyDriver() {
+            return { id: '', name: '', email: '', birth_date: '', birth_date_display: '', registration_number: '', cpf: '', rg: '', phone: '', postal_code: '', street: '', number: '', city: '', state: '', photo_url: null };
+        }
 
         function driversDrawer() {
             return {
                 open: false,
                 mode: 'view',
                 driver: {},
-                openView(id) { this.driver = { ...driversData[id] }; this.mode = 'view'; this.open = true; },
-                openEdit(id) { this.driver = { ...driversData[id] }; this.mode = 'edit'; this.open = true; },
+                actionUrl: STORE_URL,
+                openView(id) { this.driver = { ...driversData[id] }; this.actionUrl = driversData[id].update_url; this.mode = 'view'; this.open = true; },
+                openEdit(id) { this.driver = { ...driversData[id] }; this.actionUrl = driversData[id].update_url; this.mode = 'edit'; this.open = true; },
+                openCreate() { this.driver = emptyDriver(); this.actionUrl = STORE_URL; this.mode = 'create'; this.open = true; },
                 edit() { this.mode = 'edit'; },
                 close() { this.open = false; },
                 init() {
                     if (errorDriverId && driversData[errorDriverId]) {
                         this.driver = { ...driversData[errorDriverId], ...oldInput };
+                        this.actionUrl = driversData[errorDriverId].update_url;
                         this.mode = 'edit';
+                        this.open = true;
+                    } else if (hasErrors) {
+                        this.driver = { ...emptyDriver(), ...oldInput };
+                        this.actionUrl = STORE_URL;
+                        this.mode = 'create';
                         this.open = true;
                     } else if (reopenDriverId && driversData[reopenDriverId]) {
                         this.openView(reopenDriverId);
