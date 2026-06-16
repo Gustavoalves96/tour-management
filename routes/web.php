@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\TripController;
+use App\Http\Controllers\CustomerController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -26,6 +27,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('drivers', DriverController::class)->except(['show']);
     Route::post('/drivers/{driver}/photo', [\App\Http\Controllers\DriverController::class, 'updatePhoto'])->name('drivers.updatePhoto');
     Route::resource('trips', TripController::class)->except(['show']);
+    Route::resource('customers', CustomerController::class)
+        ->only(['index', 'store', 'update', 'destroy']);
 
     // Troca de senha no primeiro acesso (RF06)
     Route::get('/first-access', [FirstAccessPasswordController::class, 'edit'])->name('password.change');
