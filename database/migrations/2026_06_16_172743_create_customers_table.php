@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('cpf')->unique();
             $table->date('birth_date');
             $table->string('city');
-            $table->text('notes');
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

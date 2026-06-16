@@ -26,12 +26,11 @@
             <img src="{{ asset('images/logo-white.png') }}" alt="COINPEL" class="h-16">
         </div>
 
-        <nav class="mt-4 px-3 space-y-1">
-            {{-- Clientes (placeholder) --}}
-            <x-nav-side disabled>
-                <img src="{{ asset('icons/system-uicons_users.svg') }}" class="w-6 h-6" alt="">
-                <span>Clientes</span>
-            </x-nav-side>
+        {{-- Clientes --}}
+        <x-nav-side :href="route('customers.index')" :active="request()->routeIs('customers.*')">
+            <img src="{{ asset('icons/system-uicons_users.svg') }}" class="w-6 h-6" alt="">
+            <span>Clientes</span>
+        </x-nav-side>
 
             {{-- Motoristas --}}
             <x-nav-side :href="route('drivers.index')" :active="request()->routeIs('drivers.*')">

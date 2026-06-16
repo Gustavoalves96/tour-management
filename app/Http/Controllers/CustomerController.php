@@ -10,20 +10,32 @@ class CustomerController extends Controller
 {
     public function index(Request $request)
     {
-        // Busca por nome, e-mail ou CPF
         $search = $request->input('search');
+        $city = $request->input('city');
 
         $customers = Customer::query()
+            // Busca por nome, e-mail ou CPF (agrupada, pra não conflitar com o filtro)
             ->when($search, function ($query, $search) {
-                $query->where('name', 'ilike', "%{$search}%")
-                    ->orWhere('email', 'ilike', "%{$search}%")
-                    ->orWhere('cpf', 'ilike', "%{$search}%");
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'ilike', "%{$search}%")
+                        ->orWhere('email', 'ilike', "%{$search}%")
+                        ->orWhere('cpf', 'ilike', "%{$search}%");
+                });
             })
+            // Filtro por cidade
+            ->when($city, fn ($query, $city) => $query->where('city', $city))
             ->orderBy('name')
             ->paginate(10)
             ->withQueryString();
 
-        return view('customers.index', compact('customers', 'search'));
+        // Cidades distintas para alimentar o select do filtro
+        $cities = Customer::query()
+            ->whereNotNull('city')
+            ->distinct()
+            ->orderBy('city')
+            ->pluck('city');
+
+        return view('customers.index', compact('customers', 'search', 'city', 'cities'));
     }
 
     public function store(Request $request)
@@ -62,7 +74,7 @@ class CustomerController extends Controller
             'cpf' => ['required', 'string', 'max:14', Rule::unique('customers', 'cpf')->ignore($customer)],
             'birth_date' => ['required', 'date'],
             'city' => ['required', 'string', 'max:255'],
-            'notes' => ['required', 'string'],
+            'notes' => ['nullable', 'string'],
         ]);
     }
 }
