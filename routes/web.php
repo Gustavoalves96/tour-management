@@ -29,6 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('trips', TripController::class)->except(['show']);
     Route::resource('customers', CustomerController::class)
         ->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('packages', PackageController::class)
+        ->only(['index', 'store', 'update', 'destroy']);
 
     // Troca de senha no primeiro acesso (RF06)
     Route::get('/first-access', [FirstAccessPasswordController::class, 'edit'])->name('password.change');
