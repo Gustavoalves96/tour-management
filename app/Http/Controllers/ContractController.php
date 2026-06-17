@@ -12,15 +12,18 @@ class ContractController extends Controller
     // Lista contratos com busca (nome do cliente) e filtro por status
     public function index(Request $request)
     {
+        $search = $request->search;
+        $status = $request->status;
+
         $contracts = Contract::query()
             ->with(['customer', 'package']) // evita N+1 ao exibir cliente/pacote
-            ->when($request->search, function ($query, $search) {
+            ->when($search, function ($query, $search) {
                 // busca pelo nome do cliente relacionado
                 $query->whereHas('customer', function ($q) use ($search) {
-                    $q->where('name', 'ilike', "%{$search}%"); // ilike = case-insensitive no Postgres
+                    $q->where('name', 'ilike', "%{$search}%");
                 });
             })
-            ->when($request->status, function ($query, $status) {
+            ->when($status, function ($query, $status) {
                 $query->where('status', $status);
             })
             ->latest()
@@ -29,9 +32,9 @@ class ContractController extends Controller
 
         // listas para os selects do formulário (drawer)
         $customers = Customer::orderBy('name')->get(['id', 'name']);
-        $packages  = Package::orderBy('name')->get(['id', 'name', 'price', 'duration_days']);
+        $packages  = Package::orderBy('name')->get(['id', 'name', 'price', 'duration_days', 'origin', 'destination']);
 
-        return view('contracts.index', compact('contracts', 'customers', 'packages'));
+        return view('contracts.index', compact('contracts', 'customers', 'packages', 'search', 'status'));
     }
 
     public function store(Request $request)
