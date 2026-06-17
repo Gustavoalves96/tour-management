@@ -38,8 +38,8 @@
                 <span>Motoristas</span>
             </x-nav-side>
 
-            {{-- Estatísticas (placeholder) --}}
-            <x-nav-side disabled>
+            {{-- Estatísticas --}}
+            <x-nav-side :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 <img src="{{ asset('icons/system-uicons_graph-bar.svg') }}" class="w-6 h-6" alt="">
                 <span>Estatísticas</span>
             </x-nav-side>
