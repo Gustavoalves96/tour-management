@@ -9,6 +9,7 @@ use App\Http\Controllers\DriverController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\ContractController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -32,6 +33,7 @@ Route::middleware('auth')->group(function () {
         ->only(['index', 'store', 'update', 'destroy']);
     Route::resource('packages', PackageController::class)
         ->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('contracts', ContractController::class)->only(['index', 'store', 'update', 'destroy']);
 
     // Troca de senha no primeiro acesso (RF06)
     Route::get('/first-access', [FirstAccessPasswordController::class, 'edit'])->name('password.change');
