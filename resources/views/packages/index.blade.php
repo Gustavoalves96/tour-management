@@ -10,7 +10,7 @@
                     Filtrar
                 </button>
                 <div x-show="filterOpen" x-cloak @click.outside="filterOpen = false"
-                     class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-100 p-4 z-30">
+                     class="fixed inset-x-4 top-[4.5rem] sm:inset-x-auto sm:top-auto sm:absolute sm:right-0 sm:mt-2 sm:w-64 bg-white rounded-lg shadow-lg border border-gray-100 p-4 z-30">
                     <form method="GET" action="{{ route('packages.index') }}" class="space-y-3">
                         <input type="hidden" name="search" value="{{ $search }}">
                         <div>
