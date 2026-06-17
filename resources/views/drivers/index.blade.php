@@ -2,10 +2,32 @@
     <x-slot name="header">
         <div class="flex items-center gap-3">
             <x-add-button event="driver-create" label="Adicionar motorista" />
-            <button type="button" disabled title="Em breve"
-                    class="hidden sm:inline-flex rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-400 cursor-not-allowed whitespace-nowrap">
-                Filtrar
-            </button>            <form method="GET" action="{{ route('drivers.index') }}" class="ml-auto relative hidden sm:block">
+            {{-- Filtrar --}}
+            <div x-data="{ filterOpen: false }" class="relative">
+                <button type="button" @click="filterOpen = !filterOpen"
+                        class="rounded-lg border px-4 py-2 text-sm whitespace-nowrap hover:bg-gray-50 {{ $availability ? 'border-coinpel text-coinpel' : 'border-gray-300 text-gray-700' }}">
+                    Filtrar
+                </button>
+                <div x-show="filterOpen" x-cloak @click.outside="filterOpen = false"
+                     class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-100 p-4 z-30">
+                    <form method="GET" action="{{ route('drivers.index') }}" class="space-y-3">
+                        <input type="hidden" name="search" value="{{ $search }}">
+                        <div>
+                            <label class="block text-xs text-gray-500 mb-1">Situação</label>
+                            <select name="availability" class="w-full rounded-lg border-gray-300 text-sm focus:border-coinpel focus:ring-coinpel">
+                                <option value="">Todos</option>
+                                <option value="available" {{ $availability === 'available' ? 'selected' : '' }}>Disponível</option>
+                                <option value="on_trip" {{ $availability === 'on_trip' ? 'selected' : '' }}>Em viagem</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-2 pt-1">
+                            <button type="submit" class="flex-1 rounded-lg bg-coinpel px-3 py-2 text-sm font-medium text-white hover:bg-coinpel-dark">Aplicar</button>
+                            <a href="{{ route('drivers.index') }}" class="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">Limpar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <form method="GET" action="{{ route('drivers.index') }}" class="ml-auto relative hidden sm:block">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Pesquisar motorista"
                        class="w-56 lg:w-72 rounded-lg border-gray-300 pr-10 text-sm focus:border-coinpel focus:ring-coinpel">
                 <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2"><img src="{{ asset('icons/system-uicons_search.svg') }}" class="w-4 h-4" alt="Buscar"></button>

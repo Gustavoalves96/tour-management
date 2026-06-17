@@ -14,8 +14,11 @@ class DriverController extends Controller
     public function index(Request $request): View
     {
         $search = $request->input('search');
+        $availability = $request->input('availability'); // available | on_trip
 
         $drivers = Driver::query()
+            // conta viagens em andamento de cada motorista (pro badge na listagem)
+            ->withCount(['trips as active_trips_count' => fn ($q) => $q->where('status', 'in_progress')])
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'ilike', "%{$search}%")
@@ -23,11 +26,19 @@ class DriverController extends Controller
                         ->orWhere('cpf', 'ilike', "%{$search}%");
                 });
             })
+            // com viagem em andamento
+            ->when($availability === 'on_trip', fn ($query) =>
+            $query->whereHas('trips', fn ($q) => $q->where('status', 'in_progress'))
+            )
+            // sem nenhuma viagem em andamento
+            ->when($availability === 'available', fn ($query) =>
+            $query->whereDoesntHave('trips', fn ($q) => $q->where('status', 'in_progress'))
+            )
             ->orderBy('name')
             ->paginate(10)
             ->withQueryString();
 
-        return view('drivers.index', compact('drivers', 'search'));
+        return view('drivers.index', compact('drivers', 'search', 'availability'));
     }
 
     public function create(): View
