@@ -1,11 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center gap-3">
-            <a href="{{ route('trips.create') }}"
-               class="inline-flex items-center gap-1.5 rounded-lg bg-coinpel px-4 py-2 text-sm font-semibold text-white hover:bg-coinpel-dark whitespace-nowrap">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                Adicionar viagem
-            </a>
+            <x-add-button href="{{ route('trips.create') }}" label="Adicionar viagem" />
 
             {{-- Filtrar --}}
             <div x-data="{ filterOpen: false }" class="relative">

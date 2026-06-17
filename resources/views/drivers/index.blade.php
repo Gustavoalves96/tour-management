@@ -1,11 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center gap-3">
-            <button type="button" onclick="window.dispatchEvent(new CustomEvent('driver-create'))"
-                    class="inline-flex items-center gap-1.5 rounded-lg bg-coinpel px-4 py-2 text-sm font-semibold text-white hover:bg-coinpel-dark whitespace-nowrap">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                Adicionar motorista
-            </button>
+            <x-add-button event="driver-create" label="Adicionar motorista" />
             <button type="button" disabled title="Em breve"
                     class="hidden sm:inline-flex rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-400 cursor-not-allowed whitespace-nowrap">
                 Filtrar

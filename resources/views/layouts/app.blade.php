@@ -59,8 +59,8 @@
                 <span>Viagens</span>
             </x-nav-side>
 
-            {{-- Contratos (placeholder) --}}
-            <x-nav-side disabled>
+            {{-- Contratos --}}
+            <x-nav-side :href="route('contracts.index')" :active="request()->routeIs('contracts.*')">
                 <img src="{{ asset('icons/teenyicons_contract-outline.svg') }}" class="w-6 h-6" alt="">
                 <span>Contratos</span>
             </x-nav-side>
@@ -91,7 +91,7 @@
                 </div>
 
                 {{-- Sino + usuário --}}
-                <div class="flex items-center gap-4 shrink-0">
+                <div class="flex items-center gap-1 sm:gap-4 shrink-0">
                     <button class="text-gray-500 hover:text-gray-700">
                         <img src="{{ asset('icons/clarity_notification-line.svg') }}" class="w-6 h-6" alt="Notificações">
                     </button>

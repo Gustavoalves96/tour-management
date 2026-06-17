@@ -14,6 +14,9 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            screens: {
+                'xs': '375px', // breakpoint custom pro mobile pequeno
+            },
             colors: {
                 coinpel: {
                     light:   '#f5f2f9', // fundo claro / item de menu ativo
