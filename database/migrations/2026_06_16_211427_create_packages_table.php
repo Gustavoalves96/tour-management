@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
+            $table->string('origin');
             $table->string('destination');
             $table->decimal('price', 10, 2);
             $table->unsignedInteger('duration_days');

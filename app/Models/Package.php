@@ -9,6 +9,7 @@ class Package extends Model
     protected $fillable = [
         'name',
         'description',
+        'origin',
         'destination',
         'price',
         'duration_days',

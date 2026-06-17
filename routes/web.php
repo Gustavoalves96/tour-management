@@ -8,6 +8,7 @@ use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\PackageController;
 
 Route::get('/', function () {
     return redirect()->route('login');

@@ -65,10 +65,10 @@
                 <span>Contratos</span>
             </x-nav-side>
 
-            {{-- Pacotes (placeholder) --}}
-            <x-nav-side disabled>
-                <img src="{{ asset('icons/ion_wallet-outline.svg') }}" class="w-6 h-6" alt="">
-                <span>Pacotes</span>
+            {{-- Pacotes --}}
+            <x-nav-side :href="route('packages.index')" :active="request()->routeIs('packages.*')">
+               <img src="{{ asset('icons/ion_wallet-outline.svg') }}" class="w-6 h-6" alt="">
+               <span>Pacotes</span>
             </x-nav-side>
         </nav>
     </aside>
