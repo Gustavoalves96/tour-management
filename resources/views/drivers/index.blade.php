@@ -5,7 +5,7 @@
             {{-- Filtrar --}}
             <div x-data="{ filterOpen: false }" class="relative">
                 <button type="button" @click="filterOpen = !filterOpen"
-                        class="rounded-lg border px-5 py-2 text-sm whitespace-nowrap hover:bg-gray-50 {{ $availability ? 'border-coinpel text-coinpel' : 'border-gray-300 text-gray-700' }}">
+                        class="rounded-lg border px-3 py-2 text-sm whitespace-nowrap hover:bg-gray-50 {{ $availability ? 'border-coinpel text-coinpel' : 'border-gray-300 text-gray-700' }}">
                     Filtrar
                 </button>
                 <div x-show="filterOpen" x-cloak @click.outside="filterOpen = false"
